@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "0.1",
+  "id": "13-enriquecimento",
+  "slug": "enriquecimento",
+  "type": "guide",
+  "status": "published",
+  "locale": "pt-BR",
+  "title": "50 Ideias para Enriquecer a Vida do Seu Cão",
+  "description": "Guia prático de brincadeira, farejo e estimulação.",
+  "authors": [],
+  "tags": ["cães", "enriquecimento", "bem-estar"],
+  "readingMinutes": 35,
+  "body": {
+    "format": "markdown-path",
+    "path": "library/pt-BR/13-enriquecimento/guide.md"
+  },
+  "media": [
+    {
+      "id": "enrichment-demo",
+      "kind": "video",
+      "title": "Exemplo de enriquecimento",
+      "embedUrl": "https://www.youtube.com/embed/example",
+      "attributionRequired": false
+    }
+  ],
+  "chapters": [],
+  "access": {
+    "mode": "campaign-reward",
+    "campaignRefs": ["EBOOK_RACAO"],
+    "entitlementRefs": ["enriquecimento"]
+  },
+  "source": {
+    "repository": "nexflowx-hub/mypets-data",
+    "path": "library/pt-BR/13-enriquecimento/"
+  },
+  "extensions": {
+    "legacySlugs": [],
+    "campaignKgPerUnit": 1
+  }
+}
