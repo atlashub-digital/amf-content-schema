@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "0.1",
+  "id": "EA-001",
+  "slug": "empresa-aumentada",
+  "type": "book",
+  "status": "published",
+  "locale": "pt-PT",
+  "title": "Empresa Aumentada",
+  "subtitle": "Da Inteligência Artificial à Organização Inteligente",
+  "description": "Uma proposta de desenho organizacional para empresas em que pessoas, agentes inteligentes, tecnologia e processos operam como partes de um mesmo sistema.",
+  "authors": ["Sérgio Monteiro"],
+  "edition": "1.ª edição",
+  "tags": ["inteligência artificial", "operações", "gestão"],
+  "chapters": [
+    {
+      "id": "ea001-introducao",
+      "slug": "introducao",
+      "title": "Introdução",
+      "order": 0,
+      "number": "0",
+      "part": "Abertura",
+      "body": {
+        "format": "json-path",
+        "path": "content/empresa-aumentada-manuscript.json"
+      }
+    }
+  ],
+  "access": {
+    "mode": "public",
+    "preview": { "enabled": true }
+  },
+  "source": {
+    "repository": "nexflowx-hub/Editions.AtlasHub.Si",
+    "path": "content/"
+  },
+  "extensions": {
+    "publicationCode": "EA-001",
+    "frameworkCount": 7
+  }
+}
