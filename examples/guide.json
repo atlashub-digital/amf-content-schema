@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "0.2",
+  "id": "sample-guide",
+  "slug": "everyday-observation",
+  "type": "guide",
+  "status": "preview",
+  "locale": "pt-BR",
+  "title": "Guia de observação",
+  "authors": [
+    "AMF"
+  ],
+  "chapters": [
+    {
+      "id": "guide-start",
+      "slug": "start",
+      "title": "Começar",
+      "order": 0,
+      "body": {
+        "format": "blocks",
+        "blocks": [
+          {
+            "id": "guide-start-text",
+            "type": "paragraph",
+            "text": "Reserve alguns minutos para observar uma rotina cotidiana."
+          }
+        ]
+      }
+    },
+    {
+      "id": "guide-next",
+      "slug": "next",
+      "title": "Experimentar",
+      "order": 1,
+      "body": {
+        "format": "blocks",
+        "blocks": [
+          {
+            "id": "guide-next-text",
+            "type": "paragraph",
+            "text": "Experimente um pequeno ajuste e observe o que faz sentido manter."
+          }
+        ]
+      }
+    }
+  ],
+  "access": {
+    "mode": "public"
+  }
+}

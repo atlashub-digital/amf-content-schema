@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "0.2",
+  "id": "sample-article",
+  "slug": "small-pauses",
+  "type": "article",
+  "status": "preview",
+  "locale": "pt-BR",
+  "title": "Pequenas pausas",
+  "authors": [
+    "AMF"
+  ],
+  "body": {
+    "format": "blocks",
+    "blocks": [
+      {
+        "id": "article-title",
+        "type": "heading",
+        "text": "Um momento de atenção",
+        "level": 2
+      },
+      {
+        "id": "article-intro",
+        "type": "paragraph",
+        "text": "Uma pausa curta pode abrir espaço para observar o dia com mais calma."
+      },
+      {
+        "id": "article-note",
+        "type": "callout",
+        "title": "Exemplo de engenharia",
+        "text": "Esta fixture demonstra contratos de conteúdo; não é um produto editorial final.",
+        "tone": "note"
+      }
+    ]
+  },
+  "access": {
+    "mode": "public"
+  }
+}
