@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { CollectionSchema } from "./collection.js";
 import { PublicationSchema } from "./publication.js";
-import { ProgramSchema } from "./program.js";
+import { ProgramSchema, type Program } from "./program.js";
 import { uniqueValues } from "./validation.js";
 
 const ManifestFields = {
