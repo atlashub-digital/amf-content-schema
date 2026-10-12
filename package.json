@@ -9,7 +9,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -21,7 +22,7 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "validate:examples": "tsx scripts/validate-examples.ts",
-    "prepare": "npm run build"
+    "prepack": "npm run build"
   },
   "dependencies": {
     "zod": "^4.1.12"

@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # v6.1.0 (SHA verificado via GitHub API)
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      # v7.1.0 (SHA verificado via GitHub API)
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+      - run: npm install
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run validate:examples
+      # prepack roda npm run build durante o pack
+      - run: npm pack
+      # A tag vX.Y.Z tem de corresponder exatamente ao version do package.json
+      - name: Validate tag matches package version
+        if: github.ref_type == 'tag'
+        run: |
+          set -e
+          PKG_VERSION="$(node -p "require('./package.json').version")"
+          if [ "v$PKG_VERSION" != "${{ github.ref_name }}" ]; then
+            echo "::error::tag ${{ github.ref_name }} != package.json version v$PKG_VERSION"
+            exit 1
+          fi
+          echo "tag e version consistentes: v$PKG_VERSION"
+      # valida o artifact: instala o tarball num consumidor limpo e faz smoke de import
+      - name: Validate package artifact
+        run: |
+          set -e
+          TARBALL=$(ls *.tgz)
+          mkdir -p /tmp/consumer-check && cd /tmp/consumer-check
+          npm init -y >/dev/null
+          npm install "$GITHUB_WORKSPACE/$TARBALL" --ignore-scripts
+          node --input-type=module -e "import * as m from '@atlashub/amf-content-schema'; if (Object.keys(m).length < 10) throw new Error('exports vazios'); console.log('artifact smoke OK')"
+      # Publicação apenas via GITHUB_TOKEN nativo do repo (sem PAT permanente).
+      - name: Publish (workflow_dispatch → dry-run; tag → publish)
+        if: github.ref_type == 'tag'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Dry-run (sem tag, sem publish)
+        if: github.ref_type != 'tag'
+        run: npm publish --dry-run
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
