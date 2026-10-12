@@ -45,7 +45,7 @@ jobs:
           mkdir -p /tmp/consumer-check && cd /tmp/consumer-check
           npm init -y >/dev/null
           npm install "$GITHUB_WORKSPACE/$TARBALL" --ignore-scripts
-          node --input-type=module -e "import * as m from '@atlashub/amf-content-schema'; if (Object.keys(m).length < 10) throw new Error('exports vazios'); console.log('artifact smoke OK')"
+          node --input-type=module -e "import * as m from '@atlashub-digital/amf-content-schema'; if (Object.keys(m).length < 10) throw new Error('exports vazios'); console.log('artifact smoke OK')"
       # Publicação apenas via GITHUB_TOKEN nativo do repo (sem PAT permanente).
       - name: Publish (workflow_dispatch → dry-run; tag → publish)
         if: github.ref_type == 'tag'
