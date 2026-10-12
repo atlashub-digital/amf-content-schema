@@ -1,8 +1,11 @@
 import { z } from "zod";
+import { CanonicalBodySourceSchema } from "./blocks.js";
+import { StableIdSchema, uniqueValues } from "./validation.js";
 import { AccessPolicySchema } from "./access.js";
 import { MediaAssetSchema, MediaPlacementSchema } from "./media.js";
 
 export const PublicationTypeSchema = z.enum([
+  "article",
   "book",
   "ebook",
   "guide",
@@ -54,7 +57,7 @@ export const ChapterSchema = z.object({
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
-export const PublicationSchema = z.object({
+const PublicationObjectSchema = z.object({
   schemaVersion: z.literal("0.1"),
   id: z.string().min(1),
   slug: z.string().min(1),
@@ -82,7 +85,9 @@ export const PublicationSchema = z.object({
     })
     .optional(),
   extensions: z.record(z.string(), z.unknown()).optional(),
-}).superRefine((publication, ctx) => {
+});
+
+export const LegacyPublicationSchema = PublicationObjectSchema.superRefine((publication, ctx) => {
   if (!publication.body && publication.chapters.length === 0) {
     ctx.addIssue({
       code: "custom",
@@ -95,3 +100,35 @@ export const PublicationSchema = z.object({
 export type Publication = z.infer<typeof PublicationSchema>;
 export type Chapter = z.infer<typeof ChapterSchema>;
 export type BodySource = z.infer<typeof BodySourceSchema>;
+
+export const CanonicalChapterSchema = ChapterSchema.extend({
+  id: StableIdSchema, body: CanonicalBodySourceSchema,
+}).strict();
+
+export const CanonicalPublicationSchema = PublicationObjectSchema.extend({
+  schemaVersion: z.literal("0.2"),
+  id: StableIdSchema,
+  body: CanonicalBodySourceSchema.optional(),
+  chapters: z.array(CanonicalChapterSchema).default([]),
+}).strict().superRefine((publication, ctx) => {
+  if (!publication.body && publication.chapters.length === 0) {
+    ctx.addIssue({ code: "custom", path: ["body"], message: "A publication requires content." });
+  }
+  uniqueValues(publication.chapters.map(c => c.id), ctx, ["chapters"], "chapter id");
+  uniqueValues(publication.chapters.map(c => c.slug), ctx, ["chapters"], "chapter slug");
+  uniqueValues(publication.chapters.map(c => c.order), ctx, ["chapters"], "chapter order");
+  uniqueValues(publication.media.map(m => m.id), ctx, ["media"], "media id");
+  const mediaIds = new Set(publication.media.map(m => m.id));
+  publication.chapters.forEach((chapter, index) => {
+    uniqueValues((chapter.mediaPlacements ?? []).map(p => p.id), ctx, ["chapters", index, "mediaPlacements"], "placement id");
+    (chapter.mediaPlacements ?? []).forEach((placement, placementIndex) => {
+      if (!mediaIds.has(placement.mediaId)) ctx.addIssue({
+        code: "custom", path: ["chapters", index, "mediaPlacements", placementIndex, "mediaId"],
+        message: "Unknown media reference.",
+      });
+    });
+  });
+});
+
+export const PublicationSchema = z.union([LegacyPublicationSchema, CanonicalPublicationSchema]);
+export type CanonicalPublication = z.infer<typeof CanonicalPublicationSchema>;
